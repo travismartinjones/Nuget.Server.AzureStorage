@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using Microsoft.Azure;
 
 namespace Nuget.Server.AzureStorage
 {

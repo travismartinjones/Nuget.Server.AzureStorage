@@ -7,9 +7,9 @@ using NuGet.Server.DataServices;
 using NuGet.Server.Infrastructure;
 using RouteMagic;
 
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(AraneaIt.NugetServer.NuGetRoutes), "Start")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NugetServer.AzureStorage.Tests.NuGetRoutes), "Start")]
 
-namespace AraneaIt.NugetServer {
+namespace NugetServer.AzureStorage.Tests {
     public static class NuGetRoutes {
         public static void Start() {
             MapRoutes(RouteTable.Routes);

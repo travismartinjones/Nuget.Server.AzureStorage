@@ -11,7 +11,7 @@
     {
         public AzurePackage() {}
 
-        public IEnumerable<IPackageAssemblyReference> AssemblyReferences { get; set; }
+        public IEnumerable<IPackageAssemblyReference> AssemblyReferences { get; set; }        
         public bool IsAbsoluteLatestVersion { get; set; }
         public bool IsLatestVersion { get; set; }
         public bool Listed { get; set; }
@@ -50,6 +50,11 @@
         }
 
         public IEnumerable<FrameworkName> GetSupportedFrameworks()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ExtractContents(IFileSystem fileSystem, string extractPath)
         {
             throw new NotImplementedException();
         }

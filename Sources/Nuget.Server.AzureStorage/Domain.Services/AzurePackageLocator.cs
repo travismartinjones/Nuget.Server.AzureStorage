@@ -16,8 +16,7 @@
 
         private string GetAzureFriendlyString(string packageId)
         {
-            //return packageId.ToLower().Replace(".", "-").Replace("_","-");
-            return packageId.ToLower().Replace("_", "-");
+            return packageId.ToLower().Replace(".", "-").Replace("_","-");
         }
     }
 }

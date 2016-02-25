@@ -36,9 +36,7 @@ namespace Nuget.Server.AzureStorage
             var version = new SemanticVersion(routeData.GetRequiredString("version"));
 
             string filename = packageId + "." + version.ToString() + ".nupkg";
-
             IPackage requestedPackage = _azureRepository.FindPackage(packageId, version);
-
             if (requestedPackage != null)
             {
                 CloudBlockBlob blob = _azureRepository.GetBlob(requestedPackage);
@@ -47,11 +45,11 @@ namespace Nuget.Server.AzureStorage
                 blob.DownloadToStream(ms);
 
                 context.Response.Clear();
-                context.Response.AddHeader("content-disposition", String.Format("attachment; filename={0}", filename));
+                context.Response.AddHeader("content-disposition",
+                    String.Format("attachment; filename={0}", filename));
                 context.Response.ContentType = "application/octet-stream";
                 context.Response.BinaryWrite(ms.ToArray());
                 context.Response.End();
-                
             }
             else
             {

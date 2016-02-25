@@ -49,6 +49,12 @@ namespace NugetServer.AzureStorage.Tests
         {
             return TestStream;
         }
+
+        public void ExtractContents(IFileSystem fileSystem, string extractPath)
+        {
+            throw new NotImplementedException();
+        }
+
         public Stream TestStream { get; set; }
 
         public bool IsAbsoluteLatestVersion { get; set; }
