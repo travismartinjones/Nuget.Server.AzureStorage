@@ -11,7 +11,7 @@
 
         public string GetItemName(IPackage package)
         {
-            return this.GetAzureFriendlyString(package.Version.ToString());
+            return package.Version.ToString();
         }
 
         private string GetAzureFriendlyString(string packageId)

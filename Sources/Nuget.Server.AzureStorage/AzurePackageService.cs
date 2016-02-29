@@ -39,17 +39,32 @@ namespace Nuget.Server.AzureStorage
             IPackage requestedPackage = _azureRepository.FindPackage(packageId, version);
             if (requestedPackage != null)
             {
-                CloudBlockBlob blob = _azureRepository.GetBlob(requestedPackage);
+                try
+                {
+                    var blob = _azureRepository.GetBlob(requestedPackage);
+                    
+                    if (!blob.Exists())
+                    {
+                        WritePackageNotFound(context, packageId, version);
+                        return;
+                    }
 
-                MemoryStream ms = new MemoryStream();
-                blob.DownloadToStream(ms);
+                    var ms = new MemoryStream();
+                    blob.DownloadToStream(ms);
 
-                context.Response.Clear();
-                context.Response.AddHeader("content-disposition",
-                    String.Format("attachment; filename={0}", filename));
-                context.Response.ContentType = "application/octet-stream";
-                context.Response.BinaryWrite(ms.ToArray());
-                context.Response.End();
+                    context.Response.Clear();
+                    context.Response.AddHeader("content-disposition", $"attachment; filename={filename}");
+                    context.Response.ContentType = "application/octet-stream";
+                    context.Response.BinaryWrite(ms.ToArray());
+                    context.Response.Flush();
+                    context.Response.SuppressContent = true;
+                    context.Response.End();
+                }
+                catch (Exception exception)
+                {
+                    Elmah.ErrorSignal.FromCurrentContext().Raise(exception);                    
+                    WritePackageNotFound(context, packageId, version);
+                }
             }
             else
             {
