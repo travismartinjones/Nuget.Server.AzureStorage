@@ -14,6 +14,8 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Nuget.Server.AzureStorage.Domain.Services;
 using System.IO;
+using Elmah;
+using NuGet.Server.Publishing;
 
 namespace Nuget.Server.AzureStorage
 {
@@ -36,6 +38,7 @@ namespace Nuget.Server.AzureStorage
             var version = new SemanticVersion(routeData.GetRequiredString("version"));
 
             string filename = packageId + "." + version.ToString() + ".nupkg";
+            
             IPackage requestedPackage = _azureRepository.FindPackage(packageId, version);
             if (requestedPackage != null)
             {
@@ -61,8 +64,7 @@ namespace Nuget.Server.AzureStorage
                     context.Response.End();
                 }
                 catch (Exception exception)
-                {
-                    Elmah.ErrorSignal.FromCurrentContext().Raise(exception);                    
+                {           
                     WritePackageNotFound(context, packageId, version);
                 }
             }

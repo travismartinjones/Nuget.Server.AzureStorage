@@ -1,9 +1,12 @@
 ﻿using System.Data.SqlClient;
+using System.Web;
+using Elmah;
 using Microsoft.Azure;
 
 namespace Nuget.Server.AzureStorage
 {
     using AutoMapper;
+    using AzureStorage;
     using Microsoft.WindowsAzure;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;
@@ -53,27 +56,28 @@ namespace Nuget.Server.AzureStorage
             _blobClient = _storageAccount.CreateCloudBlobClient();
         }
 
-        /// <summary>
-        /// Gets the metadata package.
-        /// </summary>
-        /// <param name="package">The package.</param>
-        /// <returns></returns>
-        public Package GetMetadataPackage(IPackage package)
-        {
-            var derived = new DerivedPackageData() {
-                //Created = ?
-                //FullPath = ?
-                IsAbsoluteLatestVersion = package.IsAbsoluteLatestVersion,
-                IsLatestVersion = package.IsLatestVersion
-                //LastUpdated = ?
-                //PackageHash = package.GetHash(),
-                //PackageSize = ??
-                //Path = ??
-                //SupportedFrameworks = package.GetSupportedFrameworks(),
-            };
-            //var pkg = new Package(package, new DerivedPackageData());
-            return new Package(package, derived);
-        }
+        ///// <summary>
+        ///// Gets the metadata package.
+        ///// </summary>
+        ///// <param name="package">The package.</param>
+        ///// <returns></returns>
+        //public PackageMetadata GetMetadataPackage(IPackage package)
+        //{
+        //    var derived = new DerivedPackageData()
+        //    {
+        //        //Created = ?
+        //        //FullPath = ?
+        //        IsAbsoluteLatestVersion = package.IsAbsoluteLatestVersion,
+        //        IsLatestVersion = package.IsLatestVersion
+        //        //LastUpdated = ?
+        //        //PackageHash = package.GetHash(),
+        //        //PackageSize = ??
+        //        //Path = ??
+        //        //SupportedFrameworks = package.GetSupportedFrameworks(),
+        //    };
+        //    //var pkg = new Package(package, new DerivedPackageData());
+        //    return new Package(package, derived);
+        //}
 
         /// <summary>
         /// Gets the updates.
@@ -188,6 +192,11 @@ namespace Nuget.Server.AzureStorage
             }
         }
 
+        public void ClearCache()
+        {
+            
+        }
+
         /// <summary>
         /// Removes the package.
         /// </summary>
@@ -281,6 +290,7 @@ namespace Nuget.Server.AzureStorage
         /// <param name="package">The package.</param>
         public CloudBlockBlob GetBlob(IPackage package)
         {
+            ErrorLog.GetDefault(HttpContext.Current).Log(new Error(new Exception("GetBlob1")));
             var name = _packageLocator.GetContainerName(package);
             var container = _blobClient.GetContainerReference(name);
 
@@ -303,6 +313,7 @@ namespace Nuget.Server.AzureStorage
         /// <param name="version">The version.</param>
         public CloudBlockBlob GetBlob(string packageId, SemanticVersion version)
         {
+            ErrorLog.GetDefault(HttpContext.Current).Log(new Error(new Exception("GetBlob2")));
             return GetBlob(new AzurePackage
             {
                 Id = packageId,

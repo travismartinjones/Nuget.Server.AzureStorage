@@ -1,22 +1,23 @@
-﻿namespace Nuget.Server.AzureStorage
+﻿using System;
+using System.Web;
+using NuGet.Server.Publishing;
+using AutoMapper;
+using Elmah;
+using Nuget.Server.AzureStorage.Domain.Services;
+using Nuget.Server.AzureStorage.Doman.Entities;
+using NuGet;
+using NuGet.Server;
+using NuGet.Server.Infrastructure;
+
+namespace Nuget.Server.AzureStorage
 {
-    using AutoMapper;
-    using Nuget.Server.AzureStorage.Domain.Services;
-    using Nuget.Server.AzureStorage.Doman.Entities;
-    using NuGet;
-    using NuGet.Server;
-    using NuGet.Server.Infrastructure;
-
-    public static class Bootstraper
+    public static class AzureStorageStartup
     {
-        public static void SetUp()
+        public static void Startup()
         {
-            NinjectBootstrapper.Kernel.Rebind<IServerPackageRepository>().To<AzureServerPackageRepository>();
-            NinjectBootstrapper.Kernel.Rebind<IPackageService>().To<AzurePackageService>();
-            NinjectBootstrapper.Kernel.Bind<IPackageLocator>().To<AzurePackageLocator>();
-            NinjectBootstrapper.Kernel.Bind<IAzurePackageSerializer>().To<AzurePackageSerializer>();
-
+            ErrorLog.GetDefault(HttpContext.Current).Log(new Error(new Exception("Starting up")));
             SetUpMapper();
+            ServiceResolver.SetServiceResolver(new AzureServiceResolver(ServiceResolver.Current));
         }
 
         public static void SetUpMapper()

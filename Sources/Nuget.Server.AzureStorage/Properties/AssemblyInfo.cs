@@ -33,4 +33,4 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("8.2.3.13")]
 [assembly: AssemblyFileVersion("8.2.3.13")]
-[assembly: WebActivatorEx.PostApplicationStartMethod(typeof(Nuget.Server.AzureStorage.Bootstraper), "SetUp")]
+[assembly: WebActivatorEx.PostApplicationStartMethod(typeof(Nuget.Server.AzureStorage.AzureStorageStartup), "Startup")]

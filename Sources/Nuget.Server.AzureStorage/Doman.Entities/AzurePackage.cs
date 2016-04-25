@@ -1,4 +1,7 @@
-﻿namespace Nuget.Server.AzureStorage.Doman.Entities
+﻿using System.Web;
+using Elmah;
+
+namespace Nuget.Server.AzureStorage.Doman.Entities
 {
     using System;
     using System.Collections.Generic;
@@ -38,6 +41,7 @@
         public SemanticVersion Version { get; set; }
         public int DownloadCount { get; set; }
         public Uri ReportAbuseUrl { get; set; }
+        public Func<MemoryStream> GetStreamFunc { get; set; }
 
         public IEnumerable<IPackageFile> GetFiles()
         {
@@ -46,7 +50,7 @@
 
         public Stream GetStream()
         {
-            throw new NotImplementedException();
+            return GetStreamFunc();
         }
 
         public IEnumerable<FrameworkName> GetSupportedFrameworks()
