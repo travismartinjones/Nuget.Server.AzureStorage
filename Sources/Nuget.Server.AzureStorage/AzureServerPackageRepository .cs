@@ -172,6 +172,7 @@ namespace Nuget.Server.AzureStorage
                 .SelectMany(x => x)
                 .OfType<CloudBlockBlob>()
                 .Select(x => _packageSerializer.ReadFromMetadata(x))
+                .Where(x => x != null)
                 .AsQueryable<IPackage>();
         }
 

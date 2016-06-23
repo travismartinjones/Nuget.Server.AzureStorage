@@ -26,8 +26,17 @@ namespace Nuget.Server.AzureStorage.Domain.Services
                 var stream = new MemoryStream();
                 blob.DownloadToStream(stream);
                 return stream;
-            }
-            ;
+            };
+
+
+            if (!blob.Metadata.ContainsKey(PkgConsts.Id) ||
+                !blob.Metadata.ContainsKey(PkgConsts.Version) ||
+                !blob.Metadata.ContainsKey(PkgConsts.DownloadCount) ||
+                !blob.Metadata.ContainsKey(PkgConsts.RequireLicenseAcceptance) ||
+                !blob.Metadata.ContainsKey(PkgConsts.DevelopmentDependency) ||
+                !blob.Metadata.ContainsKey(PkgConsts.IsLatestVersion))
+                return null;
+
             package.Id = blob.Metadata[PkgConsts.Id];
             package.Version = new SemanticVersion(blob.Metadata[PkgConsts.Version]);
             if (blob.Metadata.ContainsKey(PkgConsts.Title))
